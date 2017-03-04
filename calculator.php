@@ -18,16 +18,15 @@ class Calculator{
 }
 
 try{
+	spl_autoload_register(function ($class_name) {
+      include $class_name . '.php';
+    });
 	if($argc <= 1) {      // check number of passed parameters. if less that 2 then throuw error.
         throw new Exception("Please enter method name. ");
 	}
 	$methodName = $argv[1];   // get user provided operation.
-	if(isset($argv[2])) {  // check for inputs.
-         $inputs = explode(',', $argv[2]); 
-	}
-	else {
-		$inputs[] = 0;  // if user has not provided any input then get 0 as default method.
-	}
+	$inputProcessor = new inputProcess();   
+	$inputs = $inputProcessor->getInputArray($argv);
 	$calculatorObj = new Calculator();   
 	echo "Your result is :".$calculatorObj->{$methodName}($inputs)."\n";   // call required operation.
 }
